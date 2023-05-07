@@ -12,6 +12,7 @@ test_that("genomicsqliteConnect", {
   # mix of GenomicSQLite & dbConnect arguments
   dbc <- genomicsqliteConnect(dbfn, threads = 7, flags = RSQLite::SQLITE_RO)
   on.exit(DBI::dbDisconnect(dbc), add = TRUE)
+  expect_equal(DBI::dbGetQuery(dbc, "PRAGMA threads")[, 1], 7)
   expect_error(
     DBI::dbExecute(dbc, "CREATE TABLE test2(x INTEGER)"),
     "attempt to write a readonly database"
